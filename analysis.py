@@ -25,7 +25,7 @@ ARGS = {
 
 # %%
 
-# Open binary diagnostic
+# Open binary diagnostic with .dat (contain tracer names and other metadata)
 df_trac = xbpch.open_bpchdataset(
     ARGS["trac_avg"],
     tracerinfo_file=ARGS["tracerinfo"],
@@ -33,16 +33,26 @@ df_trac = xbpch.open_bpchdataset(
 )
 df_trac
 
+# %%
+
+# Select variable
+df_trac["IJ_AVG_S_CO"]
 
 # %%
 
-# df_ts = xbpch.open_bpchdataset(
-#     "temp/geos45s/ts20150102.bpch",
-#     tracerinfo_file=ARGS["tracerinfo"],
-#     diaginfo_file=ARGS["diaginfo"],
-# )
-# df_ts
-
+# Select time boundaries
+df_trac["time_bnds"]
 
 # %%
 
+# Drop time boundaries and redudant dimension
+df_trac = df_trac.drop("time_bnds")
+df_trac = df_trac.drop("nv")
+
+# %%
+
+# Changes order (time, lon, lat, lev) to common order (time, lev, lat, lon)
+# df_trac = df_trac.transpose("time", "lev", "lat", "lon")
+# df_trac
+
+# %%
