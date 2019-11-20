@@ -18,7 +18,8 @@ warnings.filterwarnings("ignore")  # hide some xbpch warnings
 
 # Files path
 ARGS = {
-    "trac_avg": "temp/geos45s/trac_avg.geosfp_4x5_standard.201501010000",
+    "trac_bpch": "temp/geos45s/trac_avg.geosfp_4x5_standard.201501010000",
+    "trac_nc": "temp/geos45s/trac_avg.geosfp_4x5_standard.201501010000.nc",
     "tracerinfo": "temp/geos45s/tracerinfo.dat",
     "diaginfo": "temp/geos45s/diaginfo.dat",
 }
@@ -27,7 +28,7 @@ ARGS = {
 
 # Open binary diagnostic with .dat (contain tracer names and other metadata)
 df_trac = xbpch.open_bpchdataset(
-    ARGS["trac_avg"],
+    ARGS["trac_bpch"],
     tracerinfo_file=ARGS["tracerinfo"],
     diaginfo_file=ARGS["diaginfo"],
 )
@@ -56,3 +57,19 @@ df_trac = df_trac.drop("nv")
 # df_trac
 
 # %%
+
+# Convert BPCH data to NC format
+# df_trac = xbpch.common.fix_attr_encoding(df_trac)
+# df_trac.to_netcdf(ARGS["trac_nc"])
+
+
+# %%
+
+# Terminal command
+# !ncdump -h temp/geos45s/trac_avg.geosfp_4x5_standard.201501010000.nc
+
+# %%
+
+# Open NC
+# ds_nc = xr.open_dataset("trac.nc")
+# ds_nc
