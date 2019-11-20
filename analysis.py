@@ -84,24 +84,27 @@ df_trac = df_trac.drop("nv")
 
 # %%
 
+# PM, NOx, NMVOCs
 # Get emissions and times
-emissions = df_trac["IJ_AVG_S_CO"]
+tracers = ["IJ_AVG_S_O3", "IJ_AVG_S_NO2", "IJ_AVG_S_SO2", "IJ_AVG_S_NH3"]
+emissions = df_trac[tracers]
 times = [t.values.astype("datetime64[M]") for t in emissions["time"]]
 
 # %%
 
-fig, axes = plt.subplots(
-    1, 2, figsize=(10, 4), subplot_kw={"projection": ccrs.PlateCarree()}
-)
-
-# Plot BPCH diagnotics for each time
-for ax, t in zip(axes, rlen(times)):
-    emissions.isel(time=t, lev=0).plot(
-        ax=ax, cmap=WhGrYlRd, cbar_kwargs={"shrink": 0.5, "label": "ppbv"}
+for tracer in emissions:
+    fig, axes = plt.subplots(
+        1, 2, figsize=(10, 4), subplot_kw={"projection": ccrs.PlateCarree()}
     )
-    ax.set_title(f"IJ_AVG_S_CO emission - {times[t]}")
-    ax.coastlines()
-    ax.gridlines(linestyle="--")
+
+    # Plot BPCH diagnotics for each time
+    for ax, t in zip(axes, rlen(times)):
+        emissions[tracer].isel(time=t, lev=0).plot(
+            ax=ax, cmap=WhGrYlRd, cbar_kwargs={"shrink": 0.5, "label": "ppbv"}
+        )
+        ax.set_title(f"{tracer} emission - {times[t]}")
+        ax.coastlines()
+        ax.gridlines(linestyle="--")
 
 
 # %%
