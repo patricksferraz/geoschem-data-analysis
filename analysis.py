@@ -26,6 +26,14 @@ ARGS = {
 
 # %%
 
+
+# Get value size array
+def rlen(variable):
+    return range(len(variable))
+
+
+# %%
+
 # Open binary diagnostic with .dat (contain tracer names and other metadata)
 df_trac = xbpch.open_bpchdataset(
     ARGS["trac_bpch"],
@@ -73,3 +81,27 @@ df_trac = df_trac.drop("nv")
 # Open NC
 # ds_nc = xr.open_dataset("trac.nc")
 # ds_nc
+
+# %%
+
+# Get emissions and times
+emissions = df_trac["IJ_AVG_S_CO"]
+times = [t.values.astype("datetime64[M]") for t in emissions["time"]]
+
+# %%
+
+fig, axes = plt.subplots(
+    1, 2, figsize=(10, 4), subplot_kw={"projection": ccrs.PlateCarree()}
+)
+
+# Plot BPCH diagnotics for each time
+for ax, t in zip(axes, rlen(times)):
+    emissions.isel(time=t, lev=0).plot(
+        ax=ax, cmap=WhGrYlRd, cbar_kwargs={"shrink": 0.5, "label": "ppbv"}
+    )
+    ax.set_title(f"IJ_AVG_S_CO emission - {times[t]}")
+    ax.coastlines()
+    ax.gridlines(linestyle="--")
+
+
+# %%
