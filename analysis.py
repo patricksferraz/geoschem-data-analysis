@@ -93,21 +93,21 @@ times = [t.values.astype("datetime64[M]") for t in emissions["time"]]
 
 # %%
 
-for tracer in emissions:
+for emission in emissions.values():
     fig, axes = plt.subplots(
-        1, 2, figsize=(10, 4), subplot_kw={"projection": ccrs.PlateCarree()}
+        1, 2, figsize=(15, 5), subplot_kw={"projection": ccrs.PlateCarree()}
     )
 
     # Plot BPCH diagnotics for each time
     for ax, t in zip(axes, rlen(times)):
-        emissions[tracer].isel(time=t, lev=0).plot(
+        emission.isel(time=t, lev=0).plot(
             ax=ax, cmap=WhGrYlRd, cbar_kwargs={"shrink": 0.5, "label": "ppbv"}
         )
-        ax.set_title(f"{tracer} emission - {times[t]}")
+        ax.set_title(f"{emission.attrs['name']} concentration - {times[t]}")
         ax.coastlines()
         ax.gridlines(linestyle="--")
 
-    plt.savefig(ARGS["f_out"](tracer))
+    plt.savefig(ARGS["f_out"](emission.attrs["name"]))
 
 
 # %%
