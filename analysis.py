@@ -22,6 +22,7 @@ ARGS = {
     "trac_nc": "temp/geos45s/trac_avg.geosfp_4x5_standard.201501010000.nc",
     "tracerinfo": "temp/geos45s/tracerinfo.dat",
     "diaginfo": "temp/geos45s/diaginfo.dat",
+    "f_out": lambda x: f"out/img/{x}_emission.png",
 }
 
 # %%
@@ -105,6 +106,8 @@ for tracer in emissions:
         ax.set_title(f"{tracer} emission - {times[t]}")
         ax.coastlines()
         ax.gridlines(linestyle="--")
+
+    plt.savefig(ARGS["f_out"](tracer))
 
 
 # %%
