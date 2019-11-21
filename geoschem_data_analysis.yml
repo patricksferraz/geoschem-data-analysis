@@ -52,11 +52,14 @@ dependencies:
   - jedi=0.15.1=py36_0
   - jinja2=2.10.3=py_0
   - jpeg=9b=h024ee3a_2
+  - json5=0.8.5=py_0
   - jsonschema=3.1.1=py36_0
   - jupyter=1.0.0=py36_7
   - jupyter_client=5.3.4=py36_0
   - jupyter_console=6.0.0=py36_0
   - jupyter_core=4.6.1=py36_0
+  - jupyterlab=1.2.3=pyhf63ae98_0
+  - jupyterlab_server=1.0.6=py_0
   - kiwisolver=1.1.0=py36he6710b0_0
   - libedit=3.1.20181209=hc058e9b_0
   - libffi=3.2.1=hd88cf55_4
