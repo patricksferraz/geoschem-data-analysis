@@ -2,3 +2,4 @@ temp
 .vscode
 .ipynb_checkpoints
 out/img/*.png
+__pycache__
