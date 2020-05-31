@@ -1,29 +1,63 @@
 #!/bin/bash
 
+helpMessage() {
+   echo "Usage: `basename $0` [-e env [env_name]] [-hv]"
+   echo "Options:"
+   echo -e "\te: enviroment type (conda or pip)"
+   echo -e "\tenv_name: name of the environment for creation, mandatory for the conda environment"
+   echo -e "\th: see this message"
+   echo -e "\tv: get software version"
+   exit
+}
 
-echo "#########################################"
-echo "Initializing enviroment"
-echo "#########################################"
-if which conda;
-then
-    conda env create \
-        --name geoschem_data_analysis \
-        --file geoschem_data_analysis.yml
-    conda activate geoschem_data_analysis
+while getopts "hv" OPT
+do
+    case $OPT in
+        e) ENV=$OPTARG
+        h) helpMessage ;;
+        v)
+            echo "`basename $0` version 0.1"
+            exit ;;
+        ?) helpMessage ;;
+    esac
+done
+shift $((OPTIND-1))
 
-elif which conda;
-then
-    pip install -rrequirements.txt
+case $ENV in
+    conda)
+        if [ -z $1 ]
+        then
+            helpMessage
+        fi
 
-else
-    echo "#########################################"
-    echo "[ERRO] Conda or pip could not be found"
-    echo "#########################################"
-    exit 1
-fi
+        echo ""
+        echo "Create enviroment"
+        {
+            which conda \
+            && conda create -n $1 -f geoschem_data_analysis.yml -y \
+            && source activate $1 || conda activate $1
+        } || {
+            echo "[ERROR] Conda could not be found"
+            exit
+        }
+        ;;
+    pip)
+        echo ""
+        echo "Create enviroment"
+        {
+            which pip \
+            && pip install -r requirements.txt
+        } || {
+            echo "[ERROR] Pip could not be found"
+            exit
+        }
+        ;;
+    ?) helpMessage ;;
+esac
 
-echo "#########################################"
+echo ""
 echo "Install widget jupyter and execute"
-echo "#########################################"
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
-jupyter-lab
+
+echo ""
+echo "done."
